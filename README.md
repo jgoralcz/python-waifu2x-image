@@ -9,5 +9,8 @@ DEEP_AI_API_KEY
 `pip3 install -r requirements.txt`
 
 
-## Running
-`uvicorn app.main:dev --reload`
+## Running locally
+`uvicorn app.main:app --reload`
+
+## Docs
+`url/doc` or `url/redoc`

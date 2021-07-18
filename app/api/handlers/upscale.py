@@ -3,6 +3,10 @@ import cv2
 import numpy as np
 import aiohttp
 from io import BytesIO
+from environs import Env
+
+env = Env()
+env.read_env()
 
 
 async def upscale(url: str):
@@ -10,7 +14,7 @@ async def upscale(url: str):
         async with session.post(
             "https://api.deepai.org/api/waifu2x",
             data={"image": url},
-            headers={"api-key": "foo"},
+            headers={"api-key": env("DEEPAI_API_KEY")},
         ) as r:
             print("r is done", r)
 
@@ -35,7 +39,7 @@ async def upscale(url: str):
             im = Image.fromarray(dst)
 
             # sharpen
-            factor = 1.275
+            factor = 1.50
             enhancer = ImageEnhance.Sharpness(im)
             im_sharp = enhancer.enhance(factor)
 
