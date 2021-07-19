@@ -12,6 +12,9 @@ env = Env()
 env.read_env()
 security = HTTPBasic()
 
+print(env("USERNAME"))
+print(env("PASSWORD"))
+
 
 async def basic_auth(credentials: HTTPBasicCredentials = Depends(security)):
     correct_username = secrets.compare_digest(credentials.username, env("USERNAME"))
