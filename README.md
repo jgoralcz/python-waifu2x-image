@@ -7,7 +7,10 @@ Upscale the images using your API key from deepai using waifu2x. Then it uses op
 
 ## Running locally
 Set DEEP_AI_API_KEY, USERNAME, and PASSWORD as environment variables.
-`uvicorn app.main:app --reload`
+`uvicorn app.main:app --reload --host 0.0.0.0 --port 8443`
+
+## Debugging (for me)
+`ip -4 addr show eth0` -- bug with wsl2 not working with localhost
 
 ## Docs
 `url/doc` or `url/redoc`

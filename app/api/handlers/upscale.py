@@ -44,7 +44,8 @@ async def upscale(url: str):
     async with aiohttp.ClientSession() as session:
         async with session.get(url) as resp:
             buffer = await resp.read()
-            im = Image.open(buffer)
+            temp_bytes = np.frombuffer(bytearray(buffer), dtype=np.uint8)
+            im = Image.fromarray(temp_bytes)
             w, h = im.size
 
             if w > 400 and h > 600:

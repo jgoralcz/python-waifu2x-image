@@ -18,5 +18,5 @@ router = APIRouter()
 async def upscale_url(image: Image):
     upscaled = await upscale(image.url)
     if upscaled is None:
-        raise HTTPException(status_code=404, detail="Item not found")
+        raise HTTPException(status_code=400, detail="url not found")
     return StreamingResponse(io.BytesIO(upscaled))
