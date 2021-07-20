@@ -12,14 +12,18 @@ env = Env()
 env.read_env()
 security = HTTPBasic()
 
-print(env("USERNAME"))
-print(env("PASSWORD"))
+print(env("USERNAME").strip())
+print(env("PASSWORD").strip())
 
 
 async def basic_auth(credentials: HTTPBasicCredentials = Depends(security)):
-    correct_username = secrets.compare_digest(credentials.username, "foo")
-    correct_password = secrets.compare_digest(credentials.password, "bar")
+    correct_username = secrets.compare_digest(
+        credentials.username, env("USERNAME").strip()
+    )
     print(correct_username)
+    correct_password = secrets.compare_digest(
+        credentials.password, env("PASSWORD").strip()
+    )
     print(correct_password)
     if not (correct_username and correct_password):
         raise HTTPException(
