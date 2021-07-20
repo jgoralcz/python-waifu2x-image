@@ -56,7 +56,7 @@ async def upscale(url: str):
                 async with session.post(
                     "https://api.deepai.org/api/waifu2x",
                     data={"image": url},
-                    headers={"api-key": env("DEEPAI_API_KEY")},
+                    headers={"api-key": env("DEEP_AI_API_KEY")},
                 ) as r:
 
                     json = await r.json()
