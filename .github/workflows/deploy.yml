@@ -5,6 +5,10 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    
+    env:
+      REGISTRY: ghcr.io
+    
     steps:
       - uses: actions/checkout@v2
       - name: Extract Environment
@@ -55,7 +59,7 @@ jobs:
       - name: Login to GitHub Container Registry
         uses: docker/login-action@v1
         with:
-          registry: ghcr.io
+          registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
           
@@ -64,8 +68,8 @@ jobs:
         with:
           push: true
           tags: |
-            ghcr.io/${{ github.repository }}:${{ github.ref }}
-            ghcr.io/${{ github.repository }}:${{ steps.extract_environment.outputs.env }}
+            ${{ env.REGISTRY }}/${{ github.repository }}:${{ github.sha::6 }}
+            ${{ env.REGISTRY }}/${{ github.repository }}:${{ steps.extract_environment.outputs.env }}
 
       - name: Setup kubectl
         shell: bash
@@ -85,7 +89,7 @@ jobs:
           && kubectl rollout restart deployment/${{ env.SERVICE_NAME}}
         env:
           ENV: ${{ steps.extract_environment_uppercase.outputs.env_uppercase }}
-          IMAGE_LOCATION: docker.pkg.github.com/jgoralcz/${{ steps.extract_repo.outputs.repo }}/${{ steps.extract_repo.outputs.repo }}:${{ steps.extract_environment.outputs.env }}
+          IMAGE_LOCATION: ${{ env.REGISTRY }}/jgoralcz/${{ steps.extract_repo.outputs.repo }}/${{ steps.extract_repo.outputs.repo }}:${{ steps.extract_environment.outputs.env }}
           SERVICE_NAME: ${{ steps.extract_prefix.outputs.prefix }}${{ steps.extract_service.outputs.service }}
           PORT: 8443
           PREFIX: ${{ steps.extract_prefix.outputs.prefix }}
