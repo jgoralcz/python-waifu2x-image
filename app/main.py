@@ -17,8 +17,10 @@ print(env("PASSWORD"))
 
 
 async def basic_auth(credentials: HTTPBasicCredentials = Depends(security)):
-    correct_username = secrets.compare_digest(credentials.username, env("USERNAME"))
-    correct_password = secrets.compare_digest(credentials.password, env("PASSWORD"))
+    correct_username = secrets.compare_digest(credentials.username, "foo")
+    correct_password = secrets.compare_digest(credentials.password, "bar")
+    print(correct_username)
+    print(correct_password)
     if not (correct_username and correct_password):
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
