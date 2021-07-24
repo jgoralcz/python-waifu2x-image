@@ -5,4 +5,4 @@ opencv-python
 aiohttp
 environs
 pillow
-magic
+python-magic
