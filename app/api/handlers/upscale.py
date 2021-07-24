@@ -4,6 +4,7 @@ import numpy as np
 import aiohttp
 from io import BytesIO
 from environs import Env
+import magic
 
 env = Env()
 env.read_env()
@@ -44,6 +45,11 @@ async def upscale(url: str):
     async with aiohttp.ClientSession() as session:
         async with session.get(url) as resp:
             buffer = await resp.read()
+
+            file_type = magic.from_buffer(buffer, mime=True)
+            if "gif" in file_type:
+                return buffer
+
             temp_bytes = np.frombuffer(bytearray(buffer), dtype=np.uint8)
             im = Image.fromarray(temp_bytes)
             w, h = im.size
