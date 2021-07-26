@@ -50,13 +50,14 @@ async def upscale(url: str):
             if "gif" in file_type:
                 return buffer
 
-            temp_bytes = np.frombuffer(bytearray(buffer), dtype=np.uint8)
-            im = Image.fromarray(temp_bytes)
-            w, h = im.size
-
+            # big images don't need waifu2x
+            file_bytes = np.frombuffer(bytearray(buffer), dtype=np.uint8)
+            img = cv2.imdecode(file_bytes, cv2.IMREAD_COLOR)
+            h, w, _ = img.shape
             if w > 400 and h > 600:
                 return enhance(buffer)
 
+            # upscale then enhance
             async with session.get(url) as resp:
                 buffer = await resp.read()
                 async with session.post(
