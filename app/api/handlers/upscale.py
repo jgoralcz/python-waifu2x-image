@@ -55,7 +55,9 @@ async def upscale(url: str):
             w, h = im.size
 
             if w > 400 and h > 600:
+                print("only enhancing", w, h)
                 return enhance(buffer)
+            print("should not be happening")
 
             async with session.get(url) as resp:
                 buffer = await resp.read()
