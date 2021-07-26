@@ -18,25 +18,28 @@ def enhance(buffer):
     rgb_img = cv2.merge([r, g, b])  # switch it to rgb
 
     # denoise
-    dst = cv2.fastNlMeansDenoisingColored(rgb_img, None, 0.5, 0.5, 7, 21)
+    dst = cv2.fastNlMeansDenoisingColored(rgb_img, None, 0.8, 0.8, 7, 21)
 
     # convert to PIL
     im = Image.fromarray(dst)
 
     # sharpen
-    factor = 1.50
+    factor = 1.55
     enhancer = ImageEnhance.Sharpness(im)
     im_sharp = enhancer.enhance(factor)
 
     # contrast
-    factor = 1.03
-    enhancer = ImageEnhance.Contrast(im_sharp)
-    im_contrast = enhancer.enhance(factor)
+    factor = 1.075
+    im_contrast = ImageEnhance.Contrast(im_sharp).ehance(factor)
+
+    # brightness
+    factor = 1.075
+    im_brightness = ImageEnhance.Brightness(im_sharp).enhance(factor)
 
     # save to buffer
     img_byte_arr = BytesIO()
 
-    im_contrast.save(img_byte_arr, format="png", quality=100, subsampling=0)
+    im_brightness.save(img_byte_arr, format="png", quality=100, subsampling=0)
 
     return img_byte_arr.getvalue()
 
