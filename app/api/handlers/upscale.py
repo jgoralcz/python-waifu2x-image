@@ -30,10 +30,10 @@ def enhance(buffer):
 
     # contrast
     factor = 1.075
-    im_contrast = ImageEnhance.Contrast(im_sharp).ehance(factor)
+    im_contrast = ImageEnhance.Contrast(im_sharp).enhance(factor)
 
     # brightness
-    factor = 1.075
+    factor = 1.065
     im_brightness = ImageEnhance.Brightness(im_sharp).enhance(factor)
 
     # save to buffer
