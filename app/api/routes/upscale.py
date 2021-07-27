@@ -15,8 +15,8 @@ router = APIRouter()
 
 # post because I don't want to deal with url
 @router.post("/")
-async def upscale_url(image: Image):
-    upscaled = await upscale(image.url)
+def upscale_url(image: Image):
+    upscaled = upscale(image.url)
     if upscaled is None:
         raise HTTPException(status_code=400, detail="url not found")
     return StreamingResponse(io.BytesIO(upscaled))

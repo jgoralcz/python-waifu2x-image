@@ -1,10 +1,10 @@
 from PIL import Image, ImageEnhance
 import cv2
 import numpy as np
-import aiohttp
 from io import BytesIO
 from environs import Env
 import magic
+import requests
 
 env = Env()
 env.read_env()
@@ -41,36 +41,31 @@ def enhance(buffer):
     return img_byte_arr.getvalue()
 
 
-async def upscale(url: str):
-    async with aiohttp.ClientSession() as session:
-        async with session.get(url) as resp:
-            buffer = await resp.read()
+def upscale(url: str):
+    response = requests.get(url)
+    buffer = response.content
+    file_type = magic.from_buffer(buffer, mime=True)
+    if "gif" in file_type:
+        return buffer
 
-            file_type = magic.from_buffer(buffer, mime=True)
-            if "gif" in file_type:
-                return buffer
+    # big images don't need waifu2x
+    file_bytes = np.frombuffer(bytearray(buffer), dtype=np.uint8)
+    img = cv2.imdecode(file_bytes, cv2.IMREAD_COLOR)
+    h, w, _ = img.shape
+    if w > 400 and h > 600:
+        return enhance(buffer)
 
-            temp_bytes = np.frombuffer(bytearray(buffer), dtype=np.uint8)
-            im = Image.fromarray(temp_bytes)
-            w, h = im.size
+    # upscale then enhance
+    response = requests.post(
+        "https://api.deepai.org/api/waifu2x",
+        data={"image": url},
+        headers={"api-key": env("DEEP_AI_API_KEY")}
+    )
 
-            if w > 400 and h > 600:
-                print("only enhancing", w, h)
-                return enhance(buffer)
-            print("should not be happening")
-
-            async with session.get(url) as resp:
-                buffer = await resp.read()
-                async with session.post(
-                    "https://api.deepai.org/api/waifu2x",
-                    data={"image": url},
-                    headers={"api-key": env("DEEP_AI_API_KEY")},
-                ) as r:
-
-                    json = await r.json()
-                    output_url = json["output_url"]
-
-                    async with session.get(output_url) as resp:
-                        buffer = await resp.read()
-
-                        return enhance(buffer)
+    json = response.json()
+    output_url = json["output_url"]
+    
+    response = requests.get(output_url)
+    buffer = response.content
+    
+    return enhance(buffer)

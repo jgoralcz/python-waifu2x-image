@@ -2,7 +2,7 @@ uvicorn[standard]
 fastapi==0.66.0
 numpy
 opencv-python
-aiohttp
 environs
 pillow
 python-magic
+requests
