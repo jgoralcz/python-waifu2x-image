@@ -1,7 +1,5 @@
 uvicorn[standard]
 fastapi==0.66.0
-numpy
-opencv-python
 environs
 pillow
 python-magic

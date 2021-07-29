@@ -1,8 +1,14 @@
-FROM python:3.8
+FROM joshgor01/waifu2x-ubuntu-deps:latest
+
+COPY ./waifu2x /waifu2x
+
+RUN chmod +x /waifu2x/build.sh
+
+RUN /waifu2x/build.sh
 
 WORKDIR /usr/python
 
-RUN apt-get update && apt-get install -y python3-opencv
+RUN apt-get update && apt-get install -y python3-pip
 
 COPY requirements.txt /usr/python/
 
