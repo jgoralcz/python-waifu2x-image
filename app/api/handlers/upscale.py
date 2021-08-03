@@ -43,6 +43,10 @@ def upscale(url: str):
     # big images don't need waifu2x
     im = Image.open(BytesIO(buffer))
     w, h = im.size
+    
+    if w > 1000 and h > 1000:
+        return buffer
+    
     if w > 400 and h > 600:
         return enhance(im)
         
