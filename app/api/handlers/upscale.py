@@ -11,9 +11,11 @@ env = Env()
 env.read_env()
 
 def enhance(im):
-    # sharpen
-    factor = 1.75
-    im = ImageEnhance.Sharpness(im).enhance(factor)
+    w, h = im.size
+    if w <= 400 and h <= 600:
+        # sharpen
+        factor = 1.75
+        im = ImageEnhance.Sharpness(im).enhance(factor)
 
     # contrast
     factor = 1.10
