@@ -46,7 +46,7 @@ def upscale(url: str):
     im = Image.open(BytesIO(buffer))
     w, h = im.size
     
-    if w > 1000 and h > 1000:
+    if w > 500 and h > 700:
         return buffer
     
     if w > 400 and h > 600:
