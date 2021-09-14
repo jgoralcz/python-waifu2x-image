@@ -16,6 +16,9 @@ def enhance(im):
         # sharpen
         factor = 1.75
         im = ImageEnhance.Sharpness(im).enhance(factor)
+    else:
+        factor = 1.25
+        im = ImageEnhance.Sharpness(im).enhance(factor)
 
     # contrast
     factor = 1.10
