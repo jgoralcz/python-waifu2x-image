@@ -20,4 +20,4 @@ spec:
   tls:
     - hosts:
         - ${HOST_URL}
-      secretName: ssl-bongo
+      secretName: ssl-bongobot
