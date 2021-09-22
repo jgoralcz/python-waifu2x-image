@@ -4,3 +4,5 @@ environs
 pillow
 python-magic
 requests
+tensorflow==2.6.0
+nudenet
