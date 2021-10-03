@@ -14,22 +14,22 @@ def enhance(im):
     w, h = im.size
     if w <= 400 and h <= 600:
         # sharpen
-        factor = 1.75
+        factor = 2.00
         im = ImageEnhance.Sharpness(im).enhance(factor)
     else:
         factor = 1.25
         im = ImageEnhance.Sharpness(im).enhance(factor)
 
     # contrast
-    factor = 1.10
+    factor = 1.115
     im = ImageEnhance.Contrast(im).enhance(factor)
     
     # color
-    factor = 1.005
-    im_color = ImageEnhance.Color(im).enhance(factor)
+    factor = 1.01
+    im = ImageEnhance.Color(im).enhance(factor)
 
     # brightness
-    factor = 1.0025
+    factor = 1.004
     im = ImageEnhance.Brightness(im).enhance(factor)
 
     # save to buffer
@@ -49,7 +49,7 @@ def upscale(url: str):
     im = Image.open(BytesIO(buffer))
     w, h = im.size
     
-    if w > 500 and h > 700:
+    if w > 450 and h > 650:
         return buffer
     
     if w > 400 and h > 600:
