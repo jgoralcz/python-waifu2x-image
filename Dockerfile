@@ -1,6 +1,7 @@
 FROM joshgor01/waifu2x-ubuntu-deps:latest
 
 COPY ./waifu2x /waifu2x
+COPY ./nsfw_detector /nsfw_detector
 
 RUN chmod +x /waifu2x/build.sh
 
