@@ -12,9 +12,9 @@ env.read_env()
 
 def enhance(im):
     w, h = im.size
-    if w <= 400 and h <= 600:
+    if w < 400 and h < 600:
         # sharpen
-        factor = 2.25
+        factor = 2.5
         im = ImageEnhance.Sharpness(im).enhance(factor)
     else:
         factor = 1.25
@@ -25,11 +25,11 @@ def enhance(im):
     im = ImageEnhance.Contrast(im).enhance(factor)
     
     # color
-    factor = 1.0125
+    factor = 1.015
     im = ImageEnhance.Color(im).enhance(factor)
 
     # brightness
-    factor = 1.0035
+    factor = 1.004
     im = ImageEnhance.Brightness(im).enhance(factor)
 
     # save to buffer
@@ -51,22 +51,18 @@ def upscale(url: str):
     
     if w > 450 and h > 650:
         return buffer
-    
-    if w > 400 and h > 600:
-        return enhance(im)
-        
+
     # prepare for waifu2x
     file_name = "/data/" + str(uuid.uuid1())
     inFile = file_name + ".png"
     outFile = file_name + "_out.png"
-    
-    # enhance image
-    enhance(im)
-    
     im.save(inFile)
         
     # waifu2x it
-    subprocess.run(["/waifu2x-cpp/waifu2x-converter-cpp", "-m", "noise-scale", "-noise-level", "3", "-i", inFile, "-o", outFile])
+    if w > 400 and h > 600:
+        subprocess.run(["/waifu2x-cpp/waifu2x-converter-cpp", "--disable-gpu", "-m noise", "--noise-level 2", "-s", "-i", inFile, "-o", outFile])
+    else:
+        subprocess.run(["/waifu2x-cpp/waifu2x-converter-cpp", "--disable-gpu", "-m noise-scale", "--noise-level 2", "-s", "-i", inFile, "-o", outFile])
 
     im = Image.open(outFile)
     os.remove(outFile)
@@ -74,4 +70,4 @@ def upscale(url: str):
     img_byte_arr = BytesIO()
     im.save(img_byte_arr, format="png", quality=100, subsampling=0)
 
-    return img_byte_arr.getvalue()
+    return enhance(im)
