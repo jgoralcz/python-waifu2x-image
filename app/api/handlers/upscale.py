@@ -14,18 +14,18 @@ def enhance(im):
     w, h = im.size
     if w < 400 and h < 600:
         # sharpen
-        factor = 2.5
+        factor = 2.25
         im = ImageEnhance.Sharpness(im).enhance(factor)
     else:
         factor = 1.25
         im = ImageEnhance.Sharpness(im).enhance(factor)
 
     # contrast
-    factor = 1.115
+    factor = 1.10
     im = ImageEnhance.Contrast(im).enhance(factor)
     
     # color
-    factor = 1.015
+    factor = 1.01
     im = ImageEnhance.Color(im).enhance(factor)
 
     # brightness
